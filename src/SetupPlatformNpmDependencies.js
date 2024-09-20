@@ -8,12 +8,13 @@ const SetupPlatformNpmDependencies = async ({
     npmDependenciesDirname,
     npmDependencies
 }) => {
-    const tempDirPath = path.join(os.tmpdir(), npmDependenciesDirname)
-    process.env.EXTERNAL_NODE_MODULES_PATH = path.resolve(tempDirPath, "node_modules")
+    const tempDirPath = process.env.TEMP || process.env.TMP || '/tmp'
+    const tempDependenciesDirPath = path.join(tempDirPath, npmDependenciesDirname)
+    process.env.EXTERNAL_NODE_MODULES_PATH = path.resolve(tempDependenciesDirPath, "node_modules")
 
-    await mkdir(tempDirPath, {recursive:true})
+    await mkdir(tempDependenciesDirPath, {recursive:true})
     await InstallNpmDependencies({
-        contextPath: tempDirPath,
+        contextPath: tempDependenciesDirPath,
         dependencies: npmDependencies
     })
 
