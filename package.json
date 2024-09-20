@@ -1,0 +1,13 @@
+{
+    "name": "meta-platform-cli-script-loader-library",
+    "version": "0.0.1",
+    "description": "Biblioteca que fornece utilitários para inicializar e configurar o ambiente de execução de aplicações CLI",
+    "author": "kadisk.shark@gmail.com",
+    "license": "BSD-3-Clause",
+    "dependencies": {
+      "@npmcli/arborist": "^7.5.3",
+       "node-fetch": "^2.7.0",
+       "tar": "^7.4.0"
+    }
+  }
+  
