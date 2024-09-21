@@ -2,21 +2,19 @@ const SetupPlatformNpmDependencies = require("./src/SetupPlatformNpmDependencies
 const CreateScriptLoader = require("./src/CreateScriptLoader")
 
 const SetupCLIScriptLoader =  async ({
+    npmDependenciesDirname,
     npmDependencies,
-    metaPlatformDependencies
+    metaPlatformDependencies,
+    sourceType,
+    repoPath,
+    repoNamespace,
+    fileId
 }) => {
-
-	const npmDependenciesDirname = process.env.NPM_DEPENDENCIES_DIRNAME
 
     await SetupPlatformNpmDependencies({
         npmDependenciesDirname,
         npmDependencies
     })
-
-    const sourceType    = process.env.MINIMUM_REPO_SOURCE_TYPE
-    const repoPath      = process.env.MINIMUM_REPO_PATH
-    const repoNamespace = process.env.MINIMUM_REPO_NAMESPACE
-    const fileId        = process.env.MINIMUM_REPO_FILE_ID
 
     const DeployTemporaryMinimalRepo = require("./src/DeployTemporaryMinimalRepo")
     const tempDirPath = await DeployTemporaryMinimalRepo({

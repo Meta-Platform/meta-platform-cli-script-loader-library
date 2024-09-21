@@ -1,6 +1,6 @@
 {
     "name": "meta-platform-cli-script-loader-library",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Biblioteca que fornece utilitários para inicializar e configurar o ambiente de execução de aplicações CLI",
     "author": "kadisk.shark@gmail.com",
     "license": "BSD-3-Clause",
