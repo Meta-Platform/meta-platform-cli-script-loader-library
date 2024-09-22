@@ -10,6 +10,10 @@ const CopyDirectory = (source, destination) => {
     const entries = fs.readdirSync(source, { withFileTypes: true })
 
     for (const entry of entries) {
+
+        if (entry.name.startsWith('.')) 
+            continue
+
         const srcPath = path.join(source, entry.name)
         const destPath = path.join(destination, entry.name)
 
