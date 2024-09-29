@@ -36,7 +36,7 @@ const PrintDataLog = (dataLog, eventOrigin) => {
 		sourceNameFormatted
 	] = [
 		colors.dim(`[${GetLocalISODateTime()}]`),
-		colors.bgYellow.black(`[${eventOrigin}]`),
+		colors.gray.black(`[${eventOrigin}]`),
 		colors[color](`[${type.padEnd(7)}]`),
 		colors.inverse(`[${sourceName.padEnd(23)}]`)
 	]
