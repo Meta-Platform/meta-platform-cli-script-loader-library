@@ -8,12 +8,20 @@ const SetupCLIScriptLoader =  async ({
     sourceType,
     repoPath,
     repoNamespace,
-    fileId
+    fileId,
+    loggerEmitter
 }) => {
+
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "SetupCLIScriptLoader",
+        type: "info",
+        message: "Configurando carregador de script para linhade comando"
+    })
 
     await SetupPlatformNpmDependencies({
         npmDependenciesDirname,
-        npmDependencies
+        npmDependencies,
+        loggerEmitter
     })
 
     const DeployTemporaryMinimalRepo = require("./src/DeployTemporaryMinimalRepo")
