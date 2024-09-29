@@ -1,3 +1,4 @@
+const EventEmitter = require('node:events')
 const SetupPlatformNpmDependencies = require("./src/SetupPlatformNpmDependencies")
 const CreateScriptLoader = require("./src/CreateScriptLoader")
 const PrintDataLog = require("./src/PrintDataLog")
