@@ -1,5 +1,6 @@
 const SetupPlatformNpmDependencies = require("./src/SetupPlatformNpmDependencies")
 const CreateScriptLoader = require("./src/CreateScriptLoader")
+const PrintDataLog = require("./src/PrintDataLog")
 
 const SetupCLIScriptLoader =  async ({
     npmDependenciesDirname,
@@ -8,9 +9,12 @@ const SetupCLIScriptLoader =  async ({
     sourceType,
     repoPath,
     repoNamespace,
-    fileId,
-    loggerEmitter
+    fileId
 }) => {
+
+    const loggerEmitter = new EventEmitter()
+	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "script-loader"))
+
 
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "SetupCLIScriptLoader",
