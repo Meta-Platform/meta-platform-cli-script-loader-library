@@ -24,7 +24,7 @@ const DeployTemporaryMinimalRepo = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "DeployTemporaryMinimalRepo",
         type: "info",
-        message: `Iniciando implantação repositório mínimo de tipo ${sourceType}...`
+        message: `Iniciando implantação repositório mínimo de tipo ${colors.bold(sourceType)}...`
     })
     const tempDirPath = os.tmpdir()
     
