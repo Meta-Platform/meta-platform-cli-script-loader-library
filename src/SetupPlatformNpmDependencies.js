@@ -1,6 +1,8 @@
 const path = require("path")
 const os = require('os')
 const { mkdir } = require('node:fs/promises')
+const SmartRequire = require("./SmartRequire")
+const colors = SmartRequire("colors")
 
 const InstallNpmDependencies = require("./InstallNpmDependencies")
 
@@ -15,19 +17,18 @@ const SetupPlatformNpmDependencies = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "SetupPlatformNpmDependencies",
         type: "info",
-        message: "O diretório temporário para dependências NPM foi criado com sucesso."
-    })
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "SetupPlatformNpmDependencies",
-        type: "info",
-        message: tempDependenciesDirPath
+        message: `${colors.bold(tempDependenciesDirPath)} criado com sucesso!`
     })
     await InstallNpmDependencies({
         contextPath: tempDependenciesDirPath,
         dependencies: npmDependencies,
         loggerEmitter
     })
-
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "SetupPlatformNpmDependencies",
+        type: "info",
+        message: `Dependência configurada com sucesso!`
+    })
 }
 
 module.exports = SetupPlatformNpmDependencies

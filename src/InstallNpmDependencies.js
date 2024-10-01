@@ -1,4 +1,6 @@
 const Arborist = require("@npmcli/arborist")
+const SmartRequire = require("./SmartRequire")
+const colors = SmartRequire("colors")
 
 const InstallNpmDependencies = async ({
     contextPath, 
@@ -23,13 +25,13 @@ const InstallNpmDependencies = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallNpmDependencies",
         type: "info",
-        message: "Instalação das dependências NPM temporárias concluída com sucesso."
+        message: "Instalação das dependências NPM temporária concluída."
     })
 
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallNpmDependencies",
         type: "info",
-        message: `Dependências instaladas: ${dependenciesForAdd.join(", ")}`
+        message: `Dependências instaladas: ${colors.bold(dependenciesForAdd.join(", "))}`
     })
 }
 

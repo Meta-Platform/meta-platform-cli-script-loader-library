@@ -16,11 +16,10 @@ const SetupCLIScriptLoader =  async ({
     const loggerEmitter = new EventEmitter()
 	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "script-loader"))
 
-
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "SetupCLIScriptLoader",
         type: "info",
-        message: "Configurando carregador de script para linhade comando"
+        message: "Configurando carregador de script..."
     })
 
     await SetupPlatformNpmDependencies({
@@ -34,12 +33,14 @@ const SetupCLIScriptLoader =  async ({
         sourceType,
         repoPath,
         repoNamespace,
-        fileId
+        fileId,
+        loggerEmitter
     })
 
 	return CreateScriptLoader({
         repoPath: tempDirPath,
-        metaPlatformDependencies
+        metaPlatformDependencies,
+        loggerEmitter
     })
 }
 

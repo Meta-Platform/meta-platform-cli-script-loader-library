@@ -2,6 +2,9 @@
 const path = require("path")
 const os = require('os')
 
+const SmartRequire = require("./SmartRequire")
+const colors = SmartRequire("colors")
+
 const CopyDirectory               = require("./CopyDirectory")
 const DownloadFileFromGoogleDrive = require("./DownloadFileFromGoogleDrive")
 const ExtractTarGz                = require("./ExtractTarGz")
@@ -15,8 +18,15 @@ const DeployTemporaryMinimalRepo = async ({
     sourceType,
     repoPath,
     repoNamespace,
-    fileId
+    fileId,
+    loggerEmitter
 }) => {
+
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "DeployTemporaryMinimalRepo",
+        type: "info",
+        message: `Iniciando implantação repositório mínimo de tipo ${sourceType}...`
+    })
     const tempDirPath = os.tmpdir()
     
     switch(sourceType){
@@ -30,6 +40,12 @@ const DeployTemporaryMinimalRepo = async ({
             const repoPathExtract = await ExtractTarGz(fileNamePath, tempDirPath)
             break
     }
+
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "DeployTemporaryMinimalRepo",
+        type: "info",
+        message: `Implantação realizada com sucesso em ${colors.bold(tempDirPath)}!`
+    })
 
     return tempDirPath
 }

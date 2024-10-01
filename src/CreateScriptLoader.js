@@ -21,8 +21,16 @@ const GetLayerURI = (packageName, dependencies) => {
 
 const CreateScriptLoader = ({
     repoPath,
-    metaPlatformDependencies
+    metaPlatformDependencies,
+    loggerEmitter
 }) => {
+
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "CreateScriptLoader",
+        type: "info",
+        message: "Script Loader carregado!"
+    })
+
     return (fileURI) => {
         const packageName = GetPackageName(fileURI)
         const layerURI = GetLayerURI(packageName, metaPlatformDependencies)
