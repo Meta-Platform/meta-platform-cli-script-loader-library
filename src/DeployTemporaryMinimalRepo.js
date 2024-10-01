@@ -2,8 +2,7 @@
 const path = require("path")
 const os = require('os')
 
-const SmartRequire = require("./SmartRequire")
-const colors = SmartRequire("colors")
+const colors = require("colors")
 
 const CopyDirectory               = require("./CopyDirectory")
 const DownloadFileFromGoogleDrive = require("./DownloadFileFromGoogleDrive")

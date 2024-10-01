@@ -1,6 +1,5 @@
 const Arborist = require("@npmcli/arborist")
-const SmartRequire = require("./SmartRequire")
-const colors = SmartRequire("colors")
+const colors = require("colors")
 
 const InstallNpmDependencies = async ({
     contextPath, 

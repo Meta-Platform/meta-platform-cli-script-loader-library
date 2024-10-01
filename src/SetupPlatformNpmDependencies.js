@@ -1,8 +1,7 @@
 const path = require("path")
 const os = require('os')
 const { mkdir } = require('node:fs/promises')
-const SmartRequire = require("./SmartRequire")
-const colors = SmartRequire("colors")
+const colors = require("colors")
 
 const InstallNpmDependencies = require("./InstallNpmDependencies")
 
