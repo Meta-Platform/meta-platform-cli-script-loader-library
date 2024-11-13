@@ -1,3 +1,5 @@
+process.env.NODE_OPTIONS = "--dns-result-order=ipv4first"
+
 const Arborist = require("@npmcli/arborist")
 const colors = require("colors")
 
