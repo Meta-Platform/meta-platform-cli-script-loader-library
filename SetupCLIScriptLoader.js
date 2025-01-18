@@ -10,6 +10,8 @@ const SetupCLIScriptLoader =  async ({
     sourceType,
     repoPath,
     repoNamespace,
+    repositoryOwner,
+    repositoryName,
     fileId
 }) => {
 
@@ -34,6 +36,8 @@ const SetupCLIScriptLoader =  async ({
         repoPath,
         repoNamespace,
         fileId,
+        repositoryOwner,
+        repositoryName,
         loggerEmitter
     })
 

@@ -7,6 +7,8 @@ const colors = require("colors")
 const CopyDirectory               = require("./CopyDirectory")
 const DownloadFileFromGoogleDrive = require("./DownloadFileFromGoogleDrive")
 const ExtractTarGz                = require("./ExtractTarGz")
+const GetReleaseLatestData        = require("./GetReleaseLatestData")
+const DownloadBinary              = require("./DownloadBinary")
 
 const ConvertPathToAbsolutPath = (_path) => path
     .join(_path)
@@ -18,6 +20,8 @@ const DeployTemporaryMinimalRepo = async ({
     repoPath,
     repoNamespace,
     fileId,
+    repositoryOwner,
+    repositoryName,
     loggerEmitter
 }) => {
 
@@ -36,7 +40,22 @@ const DeployTemporaryMinimalRepo = async ({
             break
         case "GOOGLE_DRIVE":
             const fileNamePath = await DownloadFileFromGoogleDrive(fileId, tempDirPath)
-            const repoPathExtract = await ExtractTarGz(fileNamePath, tempDirPath)
+            await ExtractTarGz(fileNamePath, tempDirPath)
+            break
+        case "GITHUB_RELEASE":
+            const releaseData = await GetReleaseLatestData(repositoryOwner, repositoryName)
+
+            const {
+                tarball_url
+            } = releaseData
+
+            const binaryPath = await DownloadBinary({
+                url: tarball_url, 
+                destinationPath: tempDirPath,
+                extName: "tar.gz"
+            })
+        
+            await ExtractTarGz(binaryPath, tempDirPath)
             break
     }
 
