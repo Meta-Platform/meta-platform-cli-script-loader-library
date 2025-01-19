@@ -30,20 +30,34 @@ const DeployTemporaryMinimalRepo = async ({
         type: "info",
         message: `Iniciando implantação repositório mínimo de tipo ${colors.bold(sourceType)}...`
     })
+
+    const _ImplLoggerEmitter = (dirpath) => {
+        loggerEmitter && loggerEmitter.emit("log", {
+            sourceName: "DeployTemporaryMinimalRepo",
+            type: "info",
+            message: `Implantação realizada com sucesso em ${colors.bold(dirpath)}!`
+        })
+    }
+
     const tempDirPath = os.tmpdir()
+
+    const _GetLocalFS = () => {
+        const destinationPath = path.join(tempDirPath, repoNamespace)
+        const sourcePath = ConvertPathToAbsolutPath(repoPath)
+        CopyDirectory(sourcePath, destinationPath)
+        _ImplLoggerEmitter(tempDirPath)
+        return tempDirPath
+    }
     
-    switch(sourceType){
-        case "LOCAL_FS":
-            const destinationPath = path.join(tempDirPath, repoNamespace)
-            const sourcePath = ConvertPathToAbsolutPath(repoPath)
-            CopyDirectory(sourcePath, destinationPath)
-            break
-        case "GOOGLE_DRIVE":
-            const fileNamePath = await DownloadFileFromGoogleDrive(fileId, tempDirPath)
-            await ExtractTarGz(fileNamePath, tempDirPath)
-            break
-        case "GITHUB_RELEASE":
-            const releaseData = await GetReleaseLatestData(repositoryOwner, repositoryName)
+    const _GetGoogleDrive = async () => {
+        const fileNamePath = await DownloadFileFromGoogleDrive(fileId, tempDirPath)
+        const repoPathExtract = await ExtractTarGz(fileNamePath, tempDirPath)
+        _ImplLoggerEmitter(repoPathExtract)
+        return repoPathExtract
+    }
+
+    const _GetGithubRelease = async () => {
+        const releaseData = await GetReleaseLatestData(repositoryOwner, repositoryName)
 
             const {
                 tarball_url
@@ -55,17 +69,20 @@ const DeployTemporaryMinimalRepo = async ({
                 extName: "tar.gz"
             })
         
-            await ExtractTarGz(binaryPath, tempDirPath)
-            break
+            const repoPathExtract = await ExtractTarGz(binaryPath, tempDirPath)
+            _ImplLoggerEmitter(repoPathExtract)
+            return repoPathExtract
     }
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "DeployTemporaryMinimalRepo",
-        type: "info",
-        message: `Implantação realizada com sucesso em ${colors.bold(tempDirPath)}!`
-    })
-
-    return tempDirPath
+    switch(sourceType){
+        case "LOCAL_FS":
+           return _GetLocalFS()
+        case "GOOGLE_DRIVE":
+            return await _GetGoogleDrive()
+        case "GITHUB_RELEASE":
+            return await _GetGithubRelease()
+    }
+    
 }
 
 module.exports = DeployTemporaryMinimalRepo
