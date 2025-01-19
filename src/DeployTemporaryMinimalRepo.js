@@ -41,10 +41,14 @@ const DeployTemporaryMinimalRepo = async ({
 
     const tempDirPath = os.tmpdir()
 
-    const _GetLocalFS = () => {
+    const _Copy = (sourcePath) => {
         const destinationPath = path.join(tempDirPath, repoNamespace)
-        const sourcePath = ConvertPathToAbsolutPath(repoPath)
         CopyDirectory(sourcePath, destinationPath)
+    }
+
+    const _GetLocalFS = () => {
+        const sourcePath = ConvertPathToAbsolutPath(repoPath)
+        _Copy(sourcePath)
         _ImplLoggerEmitter(tempDirPath)
         return tempDirPath
     }
@@ -52,8 +56,9 @@ const DeployTemporaryMinimalRepo = async ({
     const _GetGoogleDrive = async () => {
         const fileNamePath = await DownloadFileFromGoogleDrive(fileId, tempDirPath)
         const repoPathExtract = await ExtractTarGz(fileNamePath, tempDirPath)
-        _ImplLoggerEmitter(repoPathExtract)
-        return repoPathExtract
+        _Copy(repoPathExtract)
+        _ImplLoggerEmitter(tempDirPath)
+        return tempDirPath
     }
 
     const _GetGithubRelease = async () => {
@@ -70,8 +75,9 @@ const DeployTemporaryMinimalRepo = async ({
             })
         
             const repoPathExtract = await ExtractTarGz(binaryPath, tempDirPath)
-            _ImplLoggerEmitter(repoPathExtract)
-            return repoPathExtract
+            _Copy(repoPathExtract)
+            _ImplLoggerEmitter(tempDirPath)
+            return tempDirPath
     }
 
     switch(sourceType){
