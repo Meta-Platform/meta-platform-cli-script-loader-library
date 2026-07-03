@@ -88,7 +88,7 @@ Função principal, exportada por `SetupCLIScriptLoader.js`. Executa, em ordem:
 |-----------|--------------|-----------|
 | `npmDependenciesDirname` | sempre | Nome da pasta criada em `os.tmpdir()` para abrigar as dependências NPM temporárias. |
 | `npmDependencies` | sempre | Objeto `{ "pacote": "versão" }` com as dependências NPM a instalar. |
-| `metaPlatformDependencies` | sempre | Lista de URIs de pacotes do repositório (ex.: `"Module/Layer/pacote.lib"`), usada por `loadScript` para resolver a *layer* de cada pacote. |
+| `metaPlatformDependencies` | sempre | Lista de URIs de pacotes do repositório, **começando pelo `repoNamespace`** (ex.: `"EssentialRepo/Module/Layer/pacote.lib"`), usada por `loadScript` para resolver a *layer* de cada pacote. |
 | `sourceType` | sempre | Tipo da fonte do repositório: `"LOCAL_FS"`, `"GOOGLE_DRIVE"` ou `"GITHUB_RELEASE"`. |
 | `repoNamespace` | sempre | Nome da pasta de destino do repositório mínimo dentro de `os.tmpdir()`. |
 | `repoPath` | `LOCAL_FS` | Caminho local do repositório de origem (aceita `~`). |
@@ -109,6 +109,11 @@ A função retornada recebe uma **URI de arquivo** no formato
 3. resolve o caminho final como
    `repoPath/<layerURI>/<fileURI>` e o carrega com `require`.
 
+> O repositório mínimo é materializado em `os.tmpdir()/<repoNamespace>` e o
+> `repoPath` interno usado na resolução aponta para `os.tmpdir()`. Por isso, cada
+> URI em `metaPlatformDependencies` **deve** começar pelo `repoNamespace` (ex.:
+> `EssentialRepo/...`) — ele é o primeiro segmento da *layer* resolvida.
+
 > Se o pacote não estiver em `metaPlatformDependencies`, é lançado o erro
 > `Pacote não encontrado [<nome>]`.
 
@@ -122,8 +127,8 @@ const SetupCLIScriptLoader = require("cli-script-loader/SetupCLIScriptLoader")
         npmDependenciesDirname: "meta-platform-cli-deps",
         npmDependencies: { "yargs": "17.7.2" },
         metaPlatformDependencies: [
-            "Commons.Module/Libraries.layer/print-data-log.lib",
-            "Main.Module/Application.layer/repository-manager.cli"
+            "EssentialRepo/Commons.Module/Libraries.layer/print-data-log.lib",
+            "EssentialRepo/Main.Module/Application.layer/repository-manager.cli"
         ],
         sourceType: "LOCAL_FS",
         repoNamespace: "EssentialRepo",
@@ -132,7 +137,7 @@ const SetupCLIScriptLoader = require("cli-script-loader/SetupCLIScriptLoader")
 
     // resolve: <tmp>/EssentialRepo/Commons.Module/Libraries.layer/print-data-log.lib/src/PrintDataLog
     const PrintDataLog = loadScript("print-data-log.lib/src/PrintDataLog")
-    PrintDataLog({ sourceName: "demo", type: "info", message: "Olá!" })
+    PrintDataLog({ sourceName: "demo", type: "info", message: "Olá!" }, "meu-script")
 })()
 ```
 
@@ -172,7 +177,7 @@ const SetupCLIScriptLoader = require("cli-script-loader/SetupCLIScriptLoader")
 
 | Sintoma | Causa / solução |
 |---------|-----------------|
-| `Pacote não encontrado [<nome>]` | O pacote pedido em `loadScript(...)` não está em `metaPlatformDependencies`. Acrescente a URI completa (`Module/Layer/pacote`). |
+| `Pacote não encontrado [<nome>]` | O pacote pedido em `loadScript(...)` não está em `metaPlatformDependencies`. Acrescente a URI completa começando pelo `repoNamespace` (`NamespaceRepo/Module/Layer/pacote`). |
 | Módulo NPM não carrega (ex.: `tar`) | A dependência precisa estar em `npmDependencies` (instalada em `EXTERNAL_NODE_MODULES_PATH`). |
 | Falha ao materializar repositório | Confira os parâmetros da fonte: `repoPath` (`LOCAL_FS`), `fileId` (`GOOGLE_DRIVE`) ou `repositoryOwner`/`repositoryName` (`GITHUB_RELEASE`). |
 
