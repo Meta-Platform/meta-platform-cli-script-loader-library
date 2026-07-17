@@ -1,12 +1,15 @@
-const RequestData = async (url) => {
-  const response = await fetch(url)
+const { RunWithRetry } = require("./RunWithRetry")
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch ${url}: ${response.statusText}`)
-  }
+const RequestData = async (url) =>
+  RunWithRetry(async () => {
+    const response = await fetch(url)
 
-  return await response.json()
-}
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`)
+    }
+
+    return await response.json()
+  }, { label: "metadados da release" })
 
 const GetReleaseLatestData = async (repoOwner, repoName) => {
   const releaseUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/releases/latest`
