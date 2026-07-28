@@ -7,27 +7,17 @@ const InstallNpmDependencies = require("./InstallNpmDependencies")
 
 const SetupPlatformNpmDependencies = async ({
     npmDependenciesDirname,
-    npmDependencies,
-    loggerEmitter
+    npmDependencies
 }) => {
     const tempDependenciesDirPath = path.join(os.tmpdir(), npmDependenciesDirname)
     process.env.EXTERNAL_NODE_MODULES_PATH = path.resolve(tempDependenciesDirPath, "node_modules")
     await mkdir(tempDependenciesDirPath, {recursive:true})
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "SetupPlatformNpmDependencies",
-        type: "info",
-        message: `${colors.bold(tempDependenciesDirPath)} criado com sucesso!`
-    })
+    Log.info("SetupPlatformNpmDependencies", `${colors.bold(tempDependenciesDirPath)} criado com sucesso!`)
     await InstallNpmDependencies({
         contextPath: tempDependenciesDirPath,
-        dependencies: npmDependencies,
-        loggerEmitter
+        dependencies: npmDependencies
     })
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "SetupPlatformNpmDependencies",
-        type: "info",
-        message: `Dependência configurada com sucesso!`
-    })
+    Log.info("SetupPlatformNpmDependencies", `Dependência configurada com sucesso!`)
 }
 
 module.exports = SetupPlatformNpmDependencies

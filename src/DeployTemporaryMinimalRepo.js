@@ -21,22 +21,13 @@ const DeployTemporaryMinimalRepo = async ({
     repoNamespace,
     fileId,
     repositoryOwner,
-    repositoryName,
-    loggerEmitter
+    repositoryName
 }) => {
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "DeployTemporaryMinimalRepo",
-        type: "info",
-        message: `Iniciando implantação repositório mínimo de tipo ${colors.bold(sourceType)}...`
-    })
+    Log.info("DeployTemporaryMinimalRepo", `Iniciando implantação repositório mínimo de tipo ${colors.bold(sourceType)}...`)
 
     const _ImplLoggerEmitter = (dirpath) => {
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "DeployTemporaryMinimalRepo",
-            type: "info",
-            message: `Implantação realizada com sucesso em ${colors.bold(dirpath)}!`
-        })
+        Log.info("DeployTemporaryMinimalRepo", `Implantação realizada com sucesso em ${colors.bold(dirpath)}!`)
     }
 
     const tempDirPath = os.tmpdir()

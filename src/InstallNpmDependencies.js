@@ -5,15 +5,10 @@ const colors = require("colors")
 
 const InstallNpmDependencies = async ({
     contextPath, 
-    dependencies,
-    loggerEmitter
+    dependencies
 }) => {
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallNpmDependencies",
-        type: "info",
-        message: "Iniciando da instalação das dependências NPM temporárias..."
-    })
+    Log.info("InstallNpmDependencies", "Iniciando da instalação das dependências NPM temporárias...")
 
     const dependenciesForAdd = Object.keys(dependencies)
         .map((name) => {
@@ -23,17 +18,9 @@ const InstallNpmDependencies = async ({
     const arborist = new Arborist({ path: contextPath, progress:true})
     await arborist.reify({add:dependenciesForAdd})
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallNpmDependencies",
-        type: "info",
-        message: "Instalação das dependências NPM temporária concluída."
-    })
+    Log.info("InstallNpmDependencies", "Instalação das dependências NPM temporária concluída.")
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallNpmDependencies",
-        type: "info",
-        message: `Dependências instaladas: ${colors.bold(dependenciesForAdd.join(", "))}`
-    })
+    Log.info("InstallNpmDependencies", `Dependências instaladas: ${colors.bold(dependenciesForAdd.join(", "))}`)
 }
 
 module.exports = InstallNpmDependencies

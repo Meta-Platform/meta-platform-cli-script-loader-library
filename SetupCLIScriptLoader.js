@@ -1,4 +1,3 @@
-const EventEmitter = require('node:events')
 const SetupPlatformNpmDependencies = require("./src/SetupPlatformNpmDependencies")
 const CreateScriptLoader = require("./src/CreateScriptLoader")
 const InstallMinimalGlobalLogger = require("./src/MinimalLogger")
@@ -24,20 +23,11 @@ const SetupCLIScriptLoader =  async ({
      */
     InstallMinimalGlobalLogger({ origin : "script-loader" })
 
-    const loggerEmitter = new EventEmitter()
-	loggerEmitter.on("log", (dataLog) =>
-		Log[LEVEL_BY_TYPE[dataLog.type] || "info"](dataLog.sourceName, dataLog.message))
-
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "SetupCLIScriptLoader",
-        type: "info",
-        message: "Configurando carregador de script..."
-    })
+    Log.info("SetupCLIScriptLoader", "Configurando carregador de script...")
 
     await SetupPlatformNpmDependencies({
         npmDependenciesDirname,
-        npmDependencies,
-        loggerEmitter
+        npmDependencies
     })
 
     const DeployTemporaryMinimalRepo = require("./src/DeployTemporaryMinimalRepo")
@@ -47,14 +37,12 @@ const SetupCLIScriptLoader =  async ({
         repoNamespace,
         fileId,
         repositoryOwner,
-        repositoryName,
-        loggerEmitter
+        repositoryName
     })
 
 	return CreateScriptLoader({
         repoPath: tempDirPath,
-        metaPlatformDependencies,
-        loggerEmitter
+        metaPlatformDependencies
     })
 }
 
