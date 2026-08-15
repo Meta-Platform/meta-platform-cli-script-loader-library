@@ -1,6 +1,7 @@
 const SetupPlatformNpmDependencies = require("./src/SetupPlatformNpmDependencies")
 const CreateScriptLoader = require("./src/CreateScriptLoader")
 const InstallMinimalGlobalLogger = require("./src/MinimalLogger")
+const InstallTypeScriptResolution = require("./src/InstallTypeScriptResolution")
 
 const LEVEL_BY_TYPE = { info : "info", success : "message", warning : "warn", error : "error" }
 
@@ -40,10 +41,19 @@ const SetupCLIScriptLoader =  async ({
         repositoryName
     })
 
-	return CreateScriptLoader({
+    const loadScript = CreateScriptLoader({
         repoPath: tempDirPath,
         metaPlatformDependencies
     })
+
+    /*
+     * Antes de devolver o carregador: a partir daqui os módulos do repositório
+     * mínimo podem ser TypeScript, e quem os requer é o consumidor deste
+     * retorno. Ver source-language-standard.md.
+     */
+    InstallTypeScriptResolution(loadScript)
+
+    return loadScript
 }
 
 module.exports = SetupCLIScriptLoader
