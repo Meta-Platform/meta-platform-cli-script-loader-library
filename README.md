@@ -33,7 +33,7 @@ repositório por **URI de pacote**.
 ### Relações
 
 - **EssentialRepo** — o repositório tipicamente carregado: o `loadScript` resolve
-  libs como `print-data-log.lib` e `ecosystem-install-utilities.lib` a partir
+  libs como `module-resolution.lib` e `ecosystem-install-utilities.lib` a partir
   dele.
 - **Setup Wizard** — **consumidor direto**: `Install.command.js`/`Update.command.js`
   do [setup-wizard](https://github.com/Meta-Platform/meta-platform-setup-wizard-command-line)
@@ -127,7 +127,7 @@ const SetupCLIScriptLoader = require("cli-script-loader/SetupCLIScriptLoader")
         npmDependenciesDirname: "meta-platform-cli-deps",
         npmDependencies: { "yargs": "17.7.2" },
         metaPlatformDependencies: [
-            "EssentialRepo/Commons.Module/Libraries.layer/print-data-log.lib",
+            "EssentialRepo/Commons.Module/Libraries.layer/module-resolution.lib",
             "EssentialRepo/Main.Module/Application.layer/repository-manager.cli"
         ],
         sourceType: "LOCAL_FS",
@@ -135,8 +135,8 @@ const SetupCLIScriptLoader = require("cli-script-loader/SetupCLIScriptLoader")
         repoPath: "~/Workspaces/meta-platform-repo/repos/essential-repository"
     })
 
-    // resolve: <tmp>/EssentialRepo/Commons.Module/Libraries.layer/print-data-log.lib/src/PrintDataLog
-    const PrintDataLog = loadScript("print-data-log.lib/src/PrintDataLog")
+    // resolve: <tmp>/EssentialRepo/Commons.Module/Libraries.layer/logger.lib/src/Logger
+    const Logger = loadScript("logger.lib/src/Logger")
     PrintDataLog({ sourceName: "demo", type: "info", message: "Olá!" }, "meu-script")
 })()
 ```
