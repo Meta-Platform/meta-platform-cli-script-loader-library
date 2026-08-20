@@ -74,7 +74,7 @@ Dependências de runtime (ver `package.json`):
 Função principal, exportada por `SetupCLIScriptLoader.js`. Executa, em ordem:
 
 1. Cria um `EventEmitter` interno de log e o conecta ao
-   [`PrintDataLog`](./src/PrintDataLog.js) (origem `"script-loader"`).
+   [`MinimalLogger`](./src/MinimalLogger.js) (origem `"script-loader"`).
 2. Instala as dependências NPM temporárias
    ([`SetupPlatformNpmDependencies`](./src/SetupPlatformNpmDependencies.js)).
 3. Implanta um repositório mínimo temporário a partir da fonte informada
@@ -162,7 +162,9 @@ const SetupCLIScriptLoader = require("cli-script-loader/SetupCLIScriptLoader")
 | [`GetReleaseLatestData.js`](./src/GetReleaseLatestData.js) | Consulta a API do GitHub pela *latest release* de um repositório. |
 | [`ExtractTarGz.js`](./src/ExtractTarGz.js) | Extrai um `.tar.gz` e retorna o caminho do primeiro item (a pasta raiz). |
 | [`ListTarGzContents.js`](./src/ListTarGzContents.js) | Lista o conteúdo (caminhos) de um `.tar.gz` sem extrair. |
-| [`PrintDataLog.js`](./src/PrintDataLog.js) | Imprime um log formatado e colorido (`[data] [origem] [tipo] [fonte] mensagem`). |
+| [`MinimalLogger.js`](./src/MinimalLogger.js) | Logger mínimo do bootstrap: mesmo formato de terminal e mesmo esquema JSONL da lib canônica, sem rotação nem retenção. É a **única cópia admitida** pelo [Logging Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/logging-standard.md) — este pacote é o próprio carregador, e roda antes de existir ecossistema de onde carregar a lib. |
+| [`RunWithRetry.js`](./src/RunWithRetry.js) | Repete uma operação com espera exponencial. Downloads do bootstrap falham de forma intermitente, e sem repetição um único soluço de rede condena a instalação inteira. |
+| [`InstallTypeScriptResolution.js`](./src/InstallTypeScriptResolution.js) | Ensina o processo da CLI a resolver `.ts`, a partir da `module-resolution.lib` do repositório mínimo recém-materializado — nunca de uma cópia local. Tolera ausência, para seguir funcionando com repositórios anteriores à lib. Ver [Source Language Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/source-language-standard.md). |
 | [`ExecuteDebugMode.js`](./src/ExecuteDebugMode.js) | Inicia um script Node com `--inspect-brk` para depuração. |
 
 > **Nota sobre `SmartRequire` / `EXTERNAL_NODE_MODULES_PATH`:** as dependências
